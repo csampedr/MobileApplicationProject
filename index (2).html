@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineVault — Tu universo de películas</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- CURSOR SPOTLIGHT -->
+  <div class="cursor-spotlight" id="cursorSpotlight"></div>
+
+  <!-- ══════════════════════════════════════════
+       SIDEBAR / NAV
+  ══════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__logo">
+      <span class="logo-icon">▶</span>
+      <span class="logo-text">Cine<strong>Vault</strong></span>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="#" class="nav-item active" data-section="popular">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        </span>
+        <span class="nav-label">Popular</span>
+      </a>
+      <a href="#" class="nav-item" data-section="search">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <span class="nav-label">Buscar</span>
+      </a>
+      <a href="#" class="nav-item" data-section="saved">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </span>
+        <span class="nav-label">Guardadas</span>
+        <span class="nav-badge" id="savedBadge" style="display:none">0</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <p>Powered by TMDB</p>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+  <main class="main" id="main">
+
+    <!-- ── POPULAR SECTION ───────────────────── -->
+    <section class="section active" id="section-popular">
+      <header class="section-header">
+        <div class="section-header__text">
+          <p class="section-eyebrow">En tendencia ahora</p>
+          <h1 class="section-title">Películas Populares</h1>
+        </div>
+        <div class="section-header__actions">
+          <button class="pill-btn active" data-period="week">Esta semana</button>
+          <button class="pill-btn" data-period="day">Hoy</button>
+        </div>
+      </header>
+
+      <div class="movies-grid" id="popularGrid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+
+      <div class="load-more-wrap">
+        <button class="btn-load-more" id="loadMorePopular">
+          <span>Ver más películas</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── SEARCH SECTION ────────────────────── -->
+    <section class="section" id="section-search">
+      <header class="section-header">
+        <div class="section-header__text">
+          <p class="section-eyebrow">Encuentra lo que buscas</p>
+          <h1 class="section-title">Buscar Películas</h1>
+        </div>
+      </header>
+
+      <div class="search-bar-wrap">
+        <div class="search-bar">
+          <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" class="search-bar__input" placeholder="Título de la película…" autocomplete="off" />
+          <button class="search-bar__clear" id="clearSearch" aria-label="Limpiar">✕</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-panel">
+        <button class="filters-toggle" id="filtersToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filtros
+          <span class="filter-count" id="filterCount" style="display:none">0</span>
+          <svg class="toggle-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="filters-body" id="filtersBody">
+          <div class="filter-group">
+            <label class="filter-label">Género</label>
+            <div class="filter-chips" id="genreChips"></div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Año de estreno</label>
+            <div class="filter-range-row">
+              <input type="number" id="yearFrom" class="filter-input" placeholder="Desde" min="1900" max="2025" />
+              <span class="range-sep">—</span>
+              <input type="number" id="yearTo" class="filter-input" placeholder="Hasta" min="1900" max="2025" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Puntuación mínima</label>
+            <div class="rating-slider-wrap">
+              <input type="range" id="ratingSlider" class="rating-slider" min="0" max="10" step="0.5" value="0" />
+              <span class="rating-value" id="ratingValue">0+</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Ordenar por</label>
+            <select class="filter-select" id="sortBy">
+              <option value="popularity.desc">Popularidad</option>
+              <option value="vote_average.desc">Puntuación</option>
+              <option value="release_date.desc">Más recientes</option>
+              <option value="release_date.asc">Más antiguas</option>
+            </select>
+          </div>
+
+          <button class="btn-reset-filters" id="resetFilters">Limpiar filtros</button>
+        </div>
+      </div>
+
+      <div class="movies-grid" id="searchGrid"></div>
+
+      <div class="empty-state" id="searchEmpty">
+        <div class="empty-state__icon">🎬</div>
+        <h3>Busca tu próxima película</h3>
+        <p>Escribe un título o usa los filtros para descubrir algo nuevo</p>
+      </div>
+    </section>
+
+    <!-- ── SAVED SECTION ─────────────────────── -->
+    <section class="section" id="section-saved">
+      <header class="section-header">
+        <div class="section-header__text">
+          <p class="section-eyebrow">Tu colección personal</p>
+          <h1 class="section-title">Guardadas</h1>
+        </div>
+      </header>
+
+      <div class="movies-grid" id="savedGrid"></div>
+
+      <div class="empty-state" id="savedEmpty">
+        <div class="empty-state__icon">🤍</div>
+        <h3>Aún no tienes películas guardadas</h3>
+        <p>Pulsa el <span class="heart-inline">♥</span> en cualquier película para añadirla aquí</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       MOVIE DETAIL MODAL
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="movieModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__close" id="modalClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="modal__backdrop-wrap">
+        <img class="modal__backdrop" id="modalBackdrop" src="" alt="" />
+        <div class="modal__backdrop-gradient"></div>
+      </div>
+
+      <div class="modal__body">
+        <div class="modal__poster-col">
+          <div class="modal__poster-wrap">
+            <img class="modal__poster" id="modalPoster" src="" alt="" />
+            <button class="btn-heart modal__heart large" id="modalHeart" aria-label="Guardar película">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal__info-col">
+          <div class="modal__meta-row">
+            <span class="modal__year" id="modalYear"></span>
+            <span class="modal__dot">·</span>
+            <span class="modal__runtime" id="modalRuntime"></span>
+            <span class="modal__dot">·</span>
+            <span class="modal__rating">
+              <svg viewBox="0 0 24 24" fill="#f5c518" width="14"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              <span id="modalScore"></span>
+            </span>
+          </div>
+
+          <h2 class="modal__title" id="modalTitle"></h2>
+          <p class="modal__tagline" id="modalTagline"></p>
+          <div class="modal__genres" id="modalGenres"></div>
+
+          <div class="modal__section">
+            <h4 class="modal__section-label">Sinopsis</h4>
+            <p class="modal__overview" id="modalOverview"></p>
+          </div>
+
+          <div class="modal__details-grid">
+            <div class="modal__detail" id="modalDirectorWrap">
+              <span class="detail-label">Director</span>
+              <span class="detail-value" id="modalDirector"></span>
+            </div>
+            <div class="modal__detail" id="modalCastWrap">
+              <span class="detail-label">Reparto principal</span>
+              <span class="detail-value" id="modalCast"></span>
+            </div>
+            <div class="modal__detail" id="modalCountryWrap">
+              <span class="detail-label">País</span>
+              <span class="detail-value" id="modalCountry"></span>
+            </div>
+            <div class="modal__detail" id="modalBudgetWrap">
+              <span class="detail-label">Presupuesto</span>
+              <span class="detail-value" id="modalBudget"></span>
+            </div>
+          </div>
+
+          <div class="modal__trailer-wrap" id="modalTrailerWrap" style="display:none">
+            <a class="btn-trailer" id="modalTrailerBtn" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14"><polygon points="5,3 19,12 5,21"/></svg>
+              Ver tráiler
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span id="toastMsg"></span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
